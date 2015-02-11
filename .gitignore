@@ -1,2 +1,4 @@
 myblog/__init__.py
+*.pyc
+
 
