@@ -1,0 +1,3 @@
+from demo_sqlal import db
+db.create_all()
+
