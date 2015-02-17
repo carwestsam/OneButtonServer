@@ -3,12 +3,8 @@ import dbOneButton as dbo
 
 from sqlalchemy import exc
 from dbOneButton import db, TimeCata, TimeType, TimeEvent
+from dbOneButton import QueryFlatter
 
-def QueryFlatter( ContentList ):
-    rev = []
-    for obj  in ContentList:
-        rev . append( obj.serialize() )
-    return rev
 
 class DBB ( object ):
     postContent = ""
@@ -48,7 +44,18 @@ class DBB ( object ):
             rev = json.dumps( rtobj.serialize() )
             print rev
             return rev
+        elif self.instr == "delCata":
+            tmpobj = json.loads( self.data )
+            cata_id = tmpobj['id']
+            rtobj = TimeCata.query.filter_by( id = cata_id ).first()
+            if rtobj is not None:
+                db.session.delete ( rtobj )
+                db.session.commit()
+            else:
+                print 'something wrong'
 
+            return 'deleted'
+ 
 
         # Type opers
         elif self.instr == "getTypeList":
@@ -72,10 +79,14 @@ class DBB ( object ):
             return rev
 
 
+
         elif self.instr == "getEventList":
             rev = json.dumps( QueryFlatter( TimeEvent.query.all() ) )
             print rev
             return rev
+
+
+
         elif self.instr == "addOneEvent":
             return "B:addOneEvent "+self.data
         else:

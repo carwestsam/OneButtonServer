@@ -21,6 +21,17 @@ def pri( id, val ):
         print id, type(val), val
 
 from OneButtonBackend import DBB
+import json
+
+@cross_origin()
+@app.route( '/oneButton1', methods=['POST', "GET", "OPTIONS"] )
+def oneButton1():
+    print 'oneButton1'
+    jsonobj = request.json
+    print jsonobj
+    pri ( 1, request.form )
+    pri( 2, request.args)
+    return "hoho"
 
 @app.route('/oneButton', methods=["POST", "GET", "OPTIONS"])
 @cross_origin()
