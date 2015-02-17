@@ -75,7 +75,7 @@ class TimeEvent( db.Model ):
         self.event_time = tmpobj[ "event_time" ];
         self.prev_id = 0
         self.next_id = 0
-        self.type = TimeEvent.query.filter_by( type_name = tmpobj[ "type_name" ] ).first()
+        self.type = TimeType.query.filter_by( id = int(tmpobj[ "type_id" ] )).first()
 
     def __repr__( self ):
         return '<timeEvent ( [%d] %d [%d] ):%r>' % ( self.prev_id, self.id, self.next_id, self.event_time )

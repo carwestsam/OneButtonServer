@@ -80,10 +80,35 @@ class DBB ( object ):
 
 
 
+        #Event opers
         elif self.instr == "getEventList":
             rev = json.dumps( QueryFlatter( TimeEvent.query.all() ) )
             print rev
             return rev
+        elif self.instr == "addEvent":
+            print "--------------\naddEvent"
+            tmpobj = json.loads( self.data )
+            header = TimeEvent.query.filter_by( id = 0 ).first()
+            tail = TimeEvent.query.filter_by( id = header.prev_id ).first()
+            
+            print header.prev_id, header.next_id
+            
+            newEvent = TimeEvent( self.data )
+            newEvent.prev_id = header.prev_id
+            db.session.add( newEvent )
+            print "*****[1]****", newEvent.id
+            db.session.commit()
+
+            print "*****[2]****", newEvent.id
+
+            header = TimeEvent.query.filter_by( id = 0 ).first()
+            tail = TimeEvent.query.filter_by( id = header.prev_id ).first()
+            tail.next_id = newEvent.id
+            header.prev_id = newEvent.id
+            db.session.commit()
+
+            
+            return "success"
 
 
 
