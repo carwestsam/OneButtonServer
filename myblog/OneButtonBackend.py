@@ -86,6 +86,7 @@ class DBB ( object ):
             print rev
             return rev
         elif self.instr == "addEvent":
+            # list truple
             print "--------------\naddEvent"
             tmpobj = json.loads( self.data )
             header = TimeEvent.query.filter_by( id = 0 ).first()
@@ -106,9 +107,25 @@ class DBB ( object ):
             tail.next_id = newEvent.id
             header.prev_id = newEvent.id
             db.session.commit()
-
             
-            return "success"
+            return json.dumps( newEvent.serialize() )
+
+        elif self.instr == "changeEventType":
+            tmpobj = json.loads( self.data )
+            _event = TimeEvent.query.filter_by( id = tmpobj[ 'event_id' ] ).first()
+            _type = TimeType.query.filter_by( id = tmpobj['type_id'] ).first()
+
+            if _type == None:
+                print "error:\tno _type found"
+            elif _event == None:
+                print "error:\tno _event found"
+
+
+            _event.type = _type
+            db.session.commit()
+            
+            _event = TimeEvent.query.filter_by( id = tmpobj[ 'event_id' ] ).first()
+            return json.dumps(_event.serialize())
 
 
 

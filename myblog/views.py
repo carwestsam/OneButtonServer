@@ -36,6 +36,11 @@ def oneButton1():
 @app.route('/oneButton', methods=["POST", "GET", "OPTIONS"])
 @cross_origin()
 def oneButton():
+    print "******************************************"
+    print "******************************************"
+    print "******************************************"
+    print "******************************************"
+
     print 'oneButton'
     pri ( 1, request.form )
     pri ( 2, request.args )
